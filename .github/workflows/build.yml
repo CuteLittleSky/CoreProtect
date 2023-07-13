@@ -25,4 +25,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build
-        run: mvn -B verify
+        run: mvn package --file pom.xml
+      - name: Get build artifact ready
+        run: mkdir staging && cp target/*.jar staging
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: Dev Build
+          path: staging
